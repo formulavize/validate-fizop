@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "baseUrl": "src"
+  }
+}
