@@ -180,7 +180,7 @@ describe('image validation', () => {
       'test': {
         'image': {
           'imgType': ImageType.UnpkgPath,
-          'imgData': './tests/emptyTestFile'
+          'imgData': './tests/fizop.test.ts'
         }
       }
     }

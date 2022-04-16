@@ -1,12 +1,12 @@
 import _ from 'lodash'
 import Ajv, {JSONSchemaType} from 'ajv'
-import {Fizop, Op, LocalizedLabel, ImageType } from 'fizop'
+import {Fizop, Op, LocalizedLabel, ImageType} from 'fizop'
 import fs from 'fs'
 import validDataUrl from 'valid-data-url'
 
-// LocalizedLabel and ImageInfo should be separately referenced schemas
-// but since 'nullable' doesn't extend const https://ajv.js.org/json-schema.html#nullable
-// Op is written as one large schema with nullable properties
+// Any nullable properties must be defined in their parent schema object
+// because 'nullable' doesn't extend const
+// https://ajv.js.org/json-schema.html#nullable
 
 const LocalizedLabelSchema: JSONSchemaType<LocalizedLabel> = {
   type: "object",
@@ -21,7 +21,7 @@ const LocalizedLabelSchema: JSONSchemaType<LocalizedLabel> = {
 const opSchema: JSONSchemaType<Op> = {
   type: "object",
   properties: {
-    label: { // LocalizedLabel schema
+    label: {
       nullable: true,
       type: ["object", "string"],
       required: [],
@@ -30,7 +30,7 @@ const opSchema: JSONSchemaType<Op> = {
         { type: "string" }
       ]
     },
-    image: { // ImageInfo schema
+    image: {
       type: "object",
       nullable: true,
       properties: {
@@ -65,7 +65,7 @@ function getLabelLangSet(operator: Op): Set<string> {
 }
 
 export function validateLocaleConsistency(fizop: Fizop): Array<FizopError> {
-  // check that all labels have the same set of locales
+  // Check that all labels have the same set of locales
   const fizopKeys = Object.keys(fizop)
   if (fizopKeys.length === 0) {
     return []
